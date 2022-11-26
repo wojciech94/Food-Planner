@@ -1,0 +1,464 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #ddd;
+}
+
+nav {
+  background-color: #999;
+  height: 80px;
+  width: 100%;
+}
+
+p {
+  padding: 2px 4px;
+}
+
+.fa-pen-to-square,
+.fa-plus {
+  color: green;
+}
+
+.fa-xmark {
+  color: red;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+}
+.nav-bar__item {
+  padding: 8px 16px;
+}
+.nav-bar__btn {
+  position: relative;
+  background: none;
+  border: none;
+  outline: none;
+  font-weight: bold;
+  font-size: 2.4rem;
+  transition: opacity 0.5s;
+  opacity: 0.8;
+  cursor: pointer;
+}
+.nav-bar__btn::before {
+  position: absolute;
+  right: 0;
+  width: 0;
+  bottom: 0;
+  height: 2px;
+  background-color: #000;
+  transition: width 0.5s, transform 0.5s;
+  content: "";
+}
+.nav-bar__btn:hover {
+  opacity: 1;
+}
+.nav-bar__btn:hover::before {
+  left: 0;
+  width: 100%;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  max-width: 1440px;
+  background-color: #666;
+  border: 4px solid rebeccapurple;
+}
+.calendar__header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+  color: #ddd;
+}
+.calendar-day {
+  width: 100%;
+  height: 100%;
+  padding: 10px 20px;
+  text-align: center;
+  background-color: #666;
+  font-weight: bold;
+  font-size: 2rem;
+}
+.calendar-day--secondary {
+  background-color: #333;
+  color: #ddd;
+}
+.calendar__content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+.calendar__foods {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #666;
+  color: #ddd;
+}
+.calendar__food-column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+  border: 2px solid rebeccapurple;
+  color: #ddd;
+}
+.calendar__food-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #ddd;
+  color: #333;
+  font-size: 1.6rem;
+  z-index: 0;
+}
+.calendar__food-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.calendar__food-name {
+  text-align: center;
+  padding: 4px 8px;
+}
+.calendar__food-remove {
+  font-weight: bold;
+  height: 100%;
+  padding: 4px;
+  margin: 0 8px;
+  font-size: 2rem;
+  color: firebrick;
+  cursor: pointer;
+}
+.calendar__food-category {
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  font-weight: bold;
+}
+.calendar__food-list {
+  position: relative;
+  top: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+.calendar__food-show {
+  width: 100%;
+  height: 100%;
+  margin: 10px 0;
+  padding: 8px;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.calendar__food-show:hover {
+  background-color: #999;
+}
+.calendar__append {
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.calendar__append:hover {
+  background-color: #999;
+}
+.calendar__add-product {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+.calendar__resume {
+  width: 100%;
+  height: 100%;
+  background-color: #666;
+  color: #111;
+}
+
+.add-manager {
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  background-color: #aaa;
+}
+.add-manager__list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  width: 30%;
+  height: calc(100vh - 80px);
+  background-color: #666;
+  border: 2px solid;
+}
+.add-manager__list-item {
+  display: flex;
+  width: 100%;
+  padding: 8px;
+  justify-content: space-between;
+  background-color: #ddd;
+}
+.add-manager__list-item:nth-child(2n) {
+  background-color: #aaa;
+}
+.add-manager__list-btn {
+  background-color: mediumseagreen;
+  padding: 6px 8px;
+  margin: 0 auto;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.add-manager__list-btn--edit {
+  margin-right: 0;
+}
+.add-manager__product-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  border: 2px solid;
+}
+.add-manager__product-box {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  background-color: #888;
+}
+.add-manager__product-details {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 50%;
+  background-color: #fff;
+}
+.add-manager__name-box {
+  display: flex;
+  margin-top: 20px;
+  justify-content: start;
+}
+.add-manager__category-box {
+  position: relative;
+  display: flex;
+  height: 180px;
+  max-height: 40px;
+  margin: 10px 0;
+  transition: max-height 0.7s ease;
+}
+.add-manager__category-box:hover {
+  max-height: 180px;
+}
+.add-manager__category-dropdown {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  height: 3.3rem;
+  transition: height 0.7s ease;
+  overflow: hidden;
+}
+.add-manager__category-dropdown:hover {
+  height: 100%;
+}
+.add-manager__category-btn {
+  cursor: pointer;
+  order: 1;
+  padding: 4px 8px;
+}
+.add-manager__category-btn--active {
+  order: 0;
+}
+.add-manager__category-btn--active::after {
+  font-family: "Font Awesome 5 Free";
+  font-size: 1.6rem;
+  font-weight: 900;
+  content: "\f07d";
+}
+.add-manager__ingredient-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #ddd;
+  border: 1px dashed;
+}
+.add-manager__ingredient-details {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+}
+.add-manager__ingredient-macro-box {
+  display: flex;
+  width: 40%;
+  justify-content: center;
+  align-items: center;
+}
+.add-manager__ingredient-macro-box .carbohydrates {
+  font-size: 1.4rem;
+}
+.add-manager__ingredient-macro-box .protein {
+  font-size: 1.4rem;
+}
+.add-manager__ingredient-macro-box .fat {
+  font-size: 1.4rem;
+}
+.add-manager__ingredient-manage-box {
+  width: 18%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.add-manager__ingredient-macro-item {
+  padding-right: 4px;
+}
+.add-manager__ingredient-manage-item {
+  padding: 4px 6px;
+  cursor: pointer;
+}
+.add-manager__ingredient-add-btn {
+  margin: 10px auto;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.add-manager__ingredient-modal {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  left: 50%;
+  top: calc(50% - 40px);
+  background-color: hsla(0deg, 0%, 0%, 0.6);
+  translate: -50% -50%;
+}
+.add-manager__ingredient-modal .modal-container {
+  position: relative;
+  width: 400px;
+  height: 360px;
+  background-color: #eee;
+  border: 2px solid;
+  border-radius: 8px;
+}
+.add-manager__ingredient-modal .input-field {
+  margin-left: 10px;
+  padding: 4px;
+}
+.add-manager__modal-btn {
+  position: absolute;
+  padding: 4px 8px;
+  right: 60px;
+  bottom: 50px;
+  width: 90px;
+  cursor: pointer;
+}
+.add-manager__modal-btn:last-child {
+  top: 50px;
+  bottom: auto;
+}
+.add-manager__modal-btn i {
+  font-size: 8rem;
+}
+.add-manager__macro-box {
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+}
+.add-manager__product-image {
+  width: 50%;
+  background-color: #333;
+}
+.add-manager__label {
+  padding: 10px 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 2rem;
+}
+.add-manager__label--modal {
+  font-size: 1.8rem;
+  text-align: start;
+}
+.add-manager__label--ingredient {
+  width: 34%;
+  padding: 4px 8px;
+  font-size: 1.6rem;
+  text-align: start;
+}
+.add-manager__label--calories {
+  width: 8%;
+  font-size: 1.6rem;
+  text-align: start;
+  align-self: center;
+  padding: 0;
+}
+.add-manager__label--name {
+  font-size: 1.6rem;
+  text-align: start;
+}
+.add-manager__label--category {
+  font-size: 1.6rem;
+  text-align: start;
+}
+.add-manager__label--macro {
+  margin-left: 20px;
+  padding: 4px 8px;
+  font-size: 1.4rem;
+  text-align: start;
+  font-weight: normal;
+}
+.add-manager__create-box {
+  margin: 10px auto;
+}
+.add-manager__create-product-btn {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.disabled {
+  display: none;
+}
+
+/*# sourceMappingURL=style.css.map */

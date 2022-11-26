@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Planner</title>
+    <script src="https://kit.fontawesome.com/1679b60163.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./src/css/style.css">
+</head>
+
+<body>
+    <nav class="nav-bar">
+        <div class="nav-bar__item">
+            <button class="nav-bar__btn nav-bar__btn--calendar">Kalendarz</button>
+        </div>
+        <div class="nav-bar__item">
+            <button class="nav-bar__btn nav-bar__btn--product">Produkty</button>
+        </div>
+    </nav>
+    <section class="calendar disabled">
+        <div class="calendar__header">
+            <div class="calendar-day">Monday</div>
+            <div class="calendar-day calendar-day--secondary">Tuesday</div>
+            <div class="calendar-day">Wednesday</div>
+            <div class="calendar-day calendar-day--secondary">Thurstday</div>
+            <div class="calendar-day">Friday</div>
+            <div class="calendar-day calendar-day--secondary">Saturday</div>
+            <div class="calendar-day">Sunday</div>
+        </div>
+        <div class="calendar__content">
+            <div class="calendar__food-column">
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">I śniadanie</p>
+                    <div class="calendar__foods">
+                    </div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">II śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">obiad</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">deser</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">przekąska</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">kolacja</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <button class="calendar__food-show">Show resume</button>
+            </div>
+            <div class="calendar__food-column">
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">I śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">II śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">obiad</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">deser</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">przekąska</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">kolacja</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <button class="calendar__food-show">Show resume</button>
+            </div>
+            <div class="calendar__food-column">
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">I śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">II śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">obiad</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">deser</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">przekąska</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">kolacja</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <button class="calendar__food-show">Show resume</button>
+            </div>
+            <div class="calendar__food-column">
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">I śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">II śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">obiad</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">deser</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">przekąska</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">kolacja</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <button class="calendar__food-show">Show resume</button>
+            </div>
+            <div class="calendar__food-column">
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">I śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">II śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">obiad</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">deser</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">przekąska</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">kolacja</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <button class="calendar__food-show">Show resume</button>
+            </div>
+            <div class="calendar__food-column">
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">I śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">II śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">obiad</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">deser</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">przekąska</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">kolacja</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <button class="calendar__food-show">Show resume</button>
+            </div>
+            <div class="calendar__food-column">
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">I śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">II śniadanie</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">obiad</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">deser</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">przekąska</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <div class="calendar__food-box">
+                    <p class="calendar__food-category">kolacja</p>
+                    <div class="calendar__foods"></div>
+                    <button class="calendar__append">Dodaj produkt</button>
+                </div>
+                <button class="calendar__food-show">Show resume</button>
+            </div>
+        </div>
+        <div class="calendar__resume"></div>
+    </section>
+    <section class="add-manager">
+        <div class="add-manager__list-container">
+            <div class="add-manager__label">Lista produktów</div>
+            <div class="add-manager__list-item">
+                <button class="add-manager__list-btn add-manager__list-btn--add">Dodaj nowy produkt</button>
+            </div>
+        </div>
+        <div class="add-manager__product-container">
+            <p class="add-manager__label add-manager__label--manage-header">Dodaj nowy przepis</p>
+            <div class="add-manager__product-box">
+                <div class="add-manager__product-details">
+                    <div class="add-manager__name-box">
+                        <p id="food-name" class="add-manager__label add-manager__label--name">Nazwa przepisu</p>
+                        <input type="text" name="food-name" id="food-name" class="product-name">
+                    </div>
+                    <div class="add-manager__category-box">
+                        <p class="add-manager__label  add-manager__label--category">Kategoria</p>
+                        <div class="add-manager__category-dropdown">
+                            <button class="add-manager__category-btn add-manager__category-btn--active"
+                                data-type="breakfast">Śniadanie</button>
+                            <button class="add-manager__category-btn" data-type="dinner">Obiad</button>
+                            <button class="add-manager__category-btn" data-type="dessert">Deser</button>
+                            <button class="add-manager__category-btn" data-type="snack">Przekąska</button>
+                            <button class="add-manager__category-btn" data-type="supper">Kolacja</button>
+                            <button class="add-manager__category-btn" data-type="any">Dowolna</button>
+                        </div>
+                    </div>
+                    <div class="add-manager__ingredient-box">
+                        <button class="add-manager__ingredient-add-btn">Dodaj nowy składnik</button>
+                    </div>
+                    <div class="add-manager__macro-box">
+                        <p class="add-manager__label add-manager__label--name">Makroskładniki</p>
+                        <p class="add-manager__label add-manager__label--macro">Węglowodany:<span
+                                class="carbohydrates-sum">0</span></p>
+                        <p class="add-manager__label add-manager__label--macro">Białko:<span
+                                class="protein-sum">0</span></p>
+                        <p class="add-manager__label add-manager__label--macro">Tłuszcze:<span class="fat-sum">0</span>
+                        </p>
+                        <p class="add-manager__label add-manager__label--name">Kalorie:<span
+                                class="calories-sum">0</span></p>
+                    </div>
+                    <div class="add-manager__create-box">
+                        <button class="add-manager__create-product-btn">Dodaj nowy produkt</button>
+                    </div>
+                </div>
+                <div class="add-manager__product-image"></div>
+            </div>
+        </div>
+        <div class="add-manager__ingredient-modal disabled">
+            <div class="modal-container">
+                <p id="ingredient-name" class="add-manager__label  add-manager__label--modal">Nazwa
+                    składnika
+                </p>
+                <input type="text" name="ingredient-name" id="ingredient-name" class="input-field ingredient-input">
+                <p id="carbohydrates" class="add-manager__label add-manager__label--modal">Węglowodany
+                    (100g)
+                </p>
+                <input type="text" name="carbohydrates" id="carbohydrates" class="input-field carbohydrate-input">
+                <p id="proteins" class="add-manager__label add-manager__label--modal">Białko (100g)</p>
+                <input type="text" name="proteins" id="proteins" class="input-field protein-input">
+                <p id="fat" class="add-manager__label add-manager__label--modal">Tłuszcze (100g)</p>
+                <input type="text" name="fat" id="fat" class="input-field fat-input">
+                <p id="weight" class="add-manager__label add-manager__label--modal">Waga 1 porcji (g)</p>
+                <input type="text" name="weight" id="weight" class="input-field weight-input">
+                <button class="add-manager__modal-btn btn-x"><i class="fa-solid fa-xmark"></i></button>
+                <button class="add-manager__modal-btn btn-plus"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+    </section>
+    <script src="./src/js/main.js"></script>
+</body>
+
+</html>
