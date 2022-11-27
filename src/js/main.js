@@ -37,8 +37,8 @@ class Product {
 		this.name = name
 		this.id = Product.nextId
 		this.category = category
-		this.ingredients = ingredients
-		this.calories = CalculateCalories.GetCalories(ingredients)
+		this.ingredients = [...ingredients]
+		this.calories = CalculationManager.GetCalories(ingredients)
 		Product.nextId++
 	}
 	static nextId = 0
@@ -47,14 +47,17 @@ class Product {
 class Ingredient {
 	constructor(name, carb, prot, fat, weight) {
 		this.name = name
+		this.id = Ingredient.nextId
 		this.carbohydrates = carb
 		this.proteins = prot
 		this.fat = fat
 		this.weight = weight
+		Ingredient.nextId++
 	}
+	static nextId = 0
 }
 
-class CalculateCalories {
+class CalculationManager {
 	static GetCalories(ingredients) {
 		let CalSum = 0
 		if (Array.isArray(ingredients)) {
@@ -66,6 +69,35 @@ class CalculateCalories {
 				((4 * ingredients.carbohydrates + 4 * ingredients.proteins + 9 * ingredients.fat) * ingredients.weight) / 100
 		}
 		return CalSum
+	}
+
+	static GetCarbohydrates(ingredients) {
+		let carbos = 0
+		if (Array.isArray(ingredients)) {
+			ingredients.forEach(ing => (carbos += (ing.carbohydrates * ing.weight) / 100))
+		} else {
+			carbos += (ing.carbohydrates * ing.weight) / 100
+		}
+		return carbos
+	}
+	static GetProteins(ingredients) {
+		let proteins = 0
+		if (Array.isArray(ingredients)) {
+			ingredients.forEach(ing => (proteins += (ing.proteins * ing.weight) / 100))
+		} else {
+			proteins += (ing.proteins * ing.weight) / 100
+		}
+		return proteins
+	}
+
+	static GetFats(ingredients) {
+		let fats = 0
+		if (Array.isArray(ingredients)) {
+			ingredients.forEach(ing => (fats += (ing.fat * ing.weight) / 100))
+		} else {
+			fats += (ing.fat * ing.weight) / 100
+		}
+		return fats
 	}
 }
 
@@ -173,7 +205,8 @@ function createIngredient(ingredient) {
 	const prote = ingredient.proteins
 	const fat = ingredient.fat
 	const weight = ingredient.weight
-	const ingredientDetails = createIngredientDetails(name, weight)
+	const id = ingredient.id
+	const ingredientDetails = createIngredientDetails(name, weight, id)
 	const macroBox = createMacroBox(carbo, prote, fat, weight)
 	const manageBox = createManageBox()
 	ingredientBox.appendChild(ingredientDetails)
@@ -181,7 +214,7 @@ function createIngredient(ingredient) {
 	ingredientBox.insertBefore(ingredientDetails, ingredientAddBtn)
 }
 
-function createIngredientDetails(name, weight) {
+function createIngredientDetails(name, weight, id) {
 	const ingredientDetails = document.createElement('div')
 	ingredientDetails.classList.add('add-manager__ingredient-details')
 	const ingredientName = document.createElement('p')
@@ -191,6 +224,7 @@ function createIngredientDetails(name, weight) {
 	ingredientDetails.append(ingredientName, ingredientWeight)
 	ingredientName.textContent = name
 	ingredientWeight.textContent = weight
+	ingredientDetails.dataset.ingredientId = id
 
 	return ingredientDetails
 }
@@ -242,8 +276,13 @@ function createManageBox() {
 
 const removeIngredient = e => {
 	const ingredientItem = e.target.closest('.add-manager__ingredient-details')
+	const id = ingredientItem.dataset.ingredientId
 	ingredientItem.remove()
-	//zaktualizować makro i kalorie, zaktualizowac liste skladnikow produktu
+	ingredients = ingredients.filter(ingr => ingr.id !== Number(id))
+	caloriesSum.textContent = CalculationManager.GetCalories(ingredients)
+	carbohydratesSum.textContent = CalculationManager.GetCarbohydrates(ingredients)
+	proteinSum.textContent = CalculationManager.GetProteins(ingredients)
+	fatSum.textContent = CalculationManager.GetFats(ingredients)
 }
 
 function addProductToList(product) {
@@ -291,9 +330,9 @@ function updateProduct(id) {
 	const product = getProductById(id)
 	const category = activeCategory.dataset.type
 	product.name = productName.value
-	product.ingredients = ingredients
+	product.ingredients = [...ingredients] //Copy of array items
 	product.category = category
-	product.calories = CalculateCalories.GetCalories(ingredients)
+	product.calories = CalculationManager.GetCalories(ingredients)
 	const item = getListItemById(id)
 	item.dataset.type = category
 	const editBtn = item.querySelector('.add-manager__list-btn--edit')
@@ -315,7 +354,7 @@ const setEditMode = e => {
 	activeCategory.classList.remove('add-manager__category-btn--active')
 	activeCategory = productContainer.querySelector(`[data-type=${category}]`)
 	activeCategory.classList.add('add-manager__category-btn--active')
-	createProductBtn.textContent = 'Edytuj produkt'
+	createProductBtn.textContent = 'Zapisz zmiany'
 	loadProduct(id)
 }
 
@@ -340,7 +379,7 @@ function loadProduct(id) {
 	const ingreds = document.querySelectorAll('.add-manager__ingredient-details')
 	ingreds.forEach(ingr => ingr.remove())
 	productName.value = prod.name
-	ingredients = prod.ingredients
+	ingredients = [...prod.ingredients]
 	productContainer.dataset.id = id
 	let carbs = 0
 	let prots = 0
