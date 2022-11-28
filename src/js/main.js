@@ -13,6 +13,7 @@ const modalBtnX = document.querySelector('.btn-x')
 const modalBtnPlus = document.querySelector('.btn-plus')
 const listContainer = document.querySelector('.add-manager__list-container')
 const listAddBtn = document.querySelector('.add-manager__list-btn--add')
+const showDayResumeBtns = document.querySelectorAll('.calendar__food-show')
 const productContainer = document.querySelector('.add-manager__product-container')
 const productHeader = document.querySelector('.add-manager__label--manage-header')
 const productName = document.querySelector('.product-name')
@@ -27,10 +28,10 @@ const proteins = document.querySelector('.protein-input')
 const fats = document.querySelector('.fat-input')
 const weights = document.querySelector('.weight-input')
 
-let targetBox
 let activeCategory
 let products = []
 let ingredients = []
+let daysPlan = []
 
 class Product {
 	constructor(name, category, ingredients) {
@@ -60,7 +61,11 @@ class Ingredient {
 class CalculationManager {
 	static GetCalories(ingredients) {
 		let CalSum = 0
-		if (Array.isArray(ingredients)) {
+		if (ingredients.constructor.name === 'Product') {
+			ingredients.ingredients.forEach(ingredient => {
+				CalSum += this.GetCalories(ingredient)
+			})
+		} else if (Array.isArray(ingredients)) {
 			ingredients.forEach(ing => {
 				CalSum += ((4 * ing.carbohydrates + 4 * ing.proteins + 9 * ing.fat) * ing.weight) / 100
 			})
@@ -73,48 +78,83 @@ class CalculationManager {
 
 	static GetCarbohydrates(ingredients) {
 		let carbos = 0
-		if (Array.isArray(ingredients)) {
+		if (ingredients.constructor.name === 'Product') {
+			ingredients.ingredients.forEach(ingredient => {
+				carbos += this.GetCarbohydrates(ingredient)
+			})
+		} else if (Array.isArray(ingredients)) {
 			ingredients.forEach(ing => (carbos += (ing.carbohydrates * ing.weight) / 100))
 		} else {
-			carbos += (ing.carbohydrates * ing.weight) / 100
+			carbos += (ingredients.carbohydrates * ingredients.weight) / 100
 		}
 		return carbos
 	}
+
 	static GetProteins(ingredients) {
 		let proteins = 0
-		if (Array.isArray(ingredients)) {
+		if (ingredients.constructor.name === 'Product') {
+			ingredients.ingredients.forEach(ingredient => {
+				proteins += this.GetProteins(ingredient)
+			})
+		} else if (Array.isArray(ingredients)) {
 			ingredients.forEach(ing => (proteins += (ing.proteins * ing.weight) / 100))
 		} else {
-			proteins += (ing.proteins * ing.weight) / 100
+			proteins += (ingredients.proteins * ingredients.weight) / 100
 		}
 		return proteins
 	}
 
 	static GetFats(ingredients) {
 		let fats = 0
-		if (Array.isArray(ingredients)) {
+
+		if (ingredients.constructor.name === 'Product') {
+			ingredients.ingredients.forEach(ingredient => {
+				fats += this.GetFats(ingredient)
+			})
+		} else if (Array.isArray(ingredients)) {
 			ingredients.forEach(ing => (fats += (ing.fat * ing.weight) / 100))
 		} else {
-			fats += (ing.fat * ing.weight) / 100
+			fats += (ingredients.fat * ingredients.weight) / 100
 		}
 		return fats
 	}
 }
 
+class PlanOfDay {
+	constructor(day) {
+		this.day = day
+		this.products = []
+	}
+}
+
+//Init days plan objects
+function initCalendar() {
+	const monday = new PlanOfDay('monday')
+	const tuesday = new PlanOfDay('tuesday')
+	const wednesday = new PlanOfDay('wednesday')
+	const thurstday = new PlanOfDay('thurstday')
+	const friday = new PlanOfDay('friday')
+	const saturday = new PlanOfDay('saturday')
+	const sunday = new PlanOfDay('sunday')
+	daysPlan.push(monday, tuesday, wednesday, thurstday, friday, saturday, sunday)
+}
+
+//Load active category
 const loadElements = () => {
 	activeCategory = document.querySelector('.add-manager__category-btn--active')
 }
 
+//Show food list btns to add it to calendar
 const showAddFood = e => {
 	const appendFoodBtn = e.target
-	targetBox = appendFoodBtn.closest('.calendar__food-box')
-	const cat = targetBox.querySelector('.calendar__food-category')
+	const targetBox = appendFoodBtn.closest('.calendar__food-box')
 	const foodList = document.createElement('div')
 	foodList.classList.add('calendar__food-list')
 	targetBox.append(foodList)
 	products.forEach(product => {
 		const btn = document.createElement('button')
 		btn.classList.add('calendar__add-product')
+		btn.dataset.id = product.id
 		btn.textContent = product.name
 		btn.addEventListener('click', addFood)
 		foodList.append(btn)
@@ -124,13 +164,16 @@ const showAddFood = e => {
 	appendFoodBtn.textContent = 'Zamknij'
 }
 
+//Reset add food to calendar events and textcontent
 function hideAddFood(target) {
 	target.removeEventListener('click', closeAppend)
 	target.addEventListener('click', showAddFood)
 	target.textContent = 'Dodaj produkt'
 }
 
+//Add product to calendar
 const addFood = e => {
+	const id = Number(e.target.dataset.id)
 	const box = e.target.closest('.calendar__food-box')
 	const appendElement = box.querySelector('.calendar__append')
 	const foods = box.querySelector('.calendar__foods')
@@ -140,20 +183,34 @@ const addFood = e => {
 	const foodName = document.createElement('p')
 	foodName.classList.add('calendar__food-name')
 	foodName.textContent = e.target.textContent
+	foodName.dataset.id = id
 	const removebtn = document.createElement('button')
 	removebtn.classList.add('calendar__food-remove')
 	removebtn.textContent = 'x'
 	removebtn.addEventListener('click', removeFood)
+	removebtn.dataset.id = id
 	foods.append(foodItem)
 	foodItem.append(foodName, removebtn)
+	const foodColumn = e.target.closest('.calendar__food-column')
+	const product = getProductById(id)
+	const day = foodColumn.dataset.day
+	const planOfDay = daysPlan.filter(d => d.day === day)[0]
+	planOfDay.products.push(product)
 	hideAddFood(appendElement)
 	foodList.remove()
 }
 
+//Remove food from calendar
 const removeFood = e => {
+	const id = Number(e.target.dataset.id)
+	const day = e.target.closest('.calendar__food-column').dataset.day
+	const planOfDay = daysPlan.filter(d => d.day === day)[0]
+	const k = planOfDay.products.findIndex(prod => prod.id === id)
+	planOfDay.products.splice(k, 1)
 	e.target.parentElement.remove()
 }
 
+//Close append food list
 const closeAppend = e => {
 	const box = e.target.closest('.calendar__food-box')
 	const foodList = box.querySelector('.calendar__food-list')
@@ -161,6 +218,7 @@ const closeAppend = e => {
 	hideAddFood(e.target)
 }
 
+//Toggle product active category
 const toggleBtn = e => {
 	if (activeCategory != null) {
 		activeCategory.classList.remove('add-manager__category-btn--active')
@@ -169,10 +227,12 @@ const toggleBtn = e => {
 	activeCategory = e.target
 }
 
+//Toggle ingredient modal
 const toggleModal = () => {
 	ingredientModal.classList.toggle('disabled')
 }
 
+//Show calendar sub-page
 const setCalendarPage = () => {
 	if (calendarPage.classList.contains('disabled')) {
 		calendarPage.classList.remove('disabled')
@@ -180,6 +240,7 @@ const setCalendarPage = () => {
 	}
 }
 
+//Set product sub-page
 const setProductPage = () => {
 	if (productPage.classList.contains('disabled')) {
 		calendarPage.classList.add('disabled')
@@ -187,6 +248,16 @@ const setProductPage = () => {
 	}
 }
 
+//Reset ingredient modal values
+function clearIngredientModal() {
+	ingredientName.value = ''
+	carbohydrates.value = ''
+	proteins.value = ''
+	fats.value = ''
+	weights.value = ''
+}
+
+//Add ingredient to product
 const addIngredient = () => {
 	const name = ingredientName.value
 	const carb = Number(carbohydrates.value)
@@ -197,8 +268,10 @@ const addIngredient = () => {
 	ingredients.push(ingredient)
 	ingredientModal.classList.toggle('disabled')
 	createIngredient(ingredient)
+	clearIngredientModal()
 }
 
+//Create ingredient html content
 function createIngredient(ingredient) {
 	const name = ingredient.name
 	const carbo = ingredient.carbohydrates
@@ -214,6 +287,7 @@ function createIngredient(ingredient) {
 	ingredientBox.insertBefore(ingredientDetails, ingredientAddBtn)
 }
 
+//Create ingredient Details content
 function createIngredientDetails(name, weight, id) {
 	const ingredientDetails = document.createElement('div')
 	ingredientDetails.classList.add('add-manager__ingredient-details')
@@ -228,6 +302,8 @@ function createIngredientDetails(name, weight, id) {
 
 	return ingredientDetails
 }
+
+//Create ingredient macro content
 function createMacroBox(carbo, prote, fat, weight) {
 	const macroBox = document.createElement('div')
 	macroBox.classList.add('add-manager__ingredient-macro-box')
@@ -255,6 +331,8 @@ function createMacroBox(carbo, prote, fat, weight) {
 
 	return macroBox
 }
+
+//Create ingredient manage buttons
 function createManageBox() {
 	const manageBox = document.createElement('div')
 	manageBox.classList.add('add-manager__ingredient-manage-box')
@@ -274,6 +352,7 @@ function createManageBox() {
 	return manageBox
 }
 
+//Remove ingredient from product, recalculate macro
 const removeIngredient = e => {
 	const ingredientItem = e.target.closest('.add-manager__ingredient-details')
 	const id = ingredientItem.dataset.ingredientId
@@ -285,6 +364,7 @@ const removeIngredient = e => {
 	fatSum.textContent = CalculationManager.GetFats(ingredients)
 }
 
+//Create product list item
 function addProductToList(product) {
 	const name = product.name
 	const id = product.id
@@ -292,6 +372,7 @@ function addProductToList(product) {
 	createListItem(name, category, id)
 }
 
+//Create product list content
 function createListItem(name, category, id) {
 	const listItem = document.createElement('div')
 	const nameDiv = document.createElement('p')
@@ -316,6 +397,7 @@ function createListItem(name, category, id) {
 	activeCategory.classList.add('add-manager__category-btn--active')
 }
 
+//Create new product and add to list
 const createProduct = () => {
 	const name = productName.value
 	const category = activeCategory.dataset.type
@@ -326,6 +408,7 @@ const createProduct = () => {
 	resetProduct()
 }
 
+//Update product of specified id
 function updateProduct(id) {
 	const product = getProductById(id)
 	const category = activeCategory.dataset.type
@@ -341,12 +424,14 @@ function updateProduct(id) {
 	label.textContent = product.name
 }
 
+//Execute edit product btn
 const editProduct = e => {
 	const target = e.target.closest('.add-manager__product-container')
 	const id = Number(target.dataset.id)
 	updateProduct(id)
 }
 
+//Set edit mode of product page
 const setEditMode = e => {
 	productHeader.textContent = 'Edytuj przepis'
 	const id = Number(e.target.dataset.id)
@@ -358,22 +443,26 @@ const setEditMode = e => {
 	loadProduct(id)
 }
 
+//Set add mode of product page
 const setAddMode = () => {
 	productHeader.textContent = 'Dodaj nowy przepis'
 	createProductBtn.textContent = 'Dodaj nowy produkt'
 	resetProduct()
 }
 
+//Get product from list by id
 function getProductById(id) {
 	return products.filter(product => product.id === id)[0]
 }
 
+//Get list item by product id
 function getListItemById(id) {
 	const listItems = Array.from(document.querySelectorAll('.add-manager__list-item'))
 	const listItem = listItems.filter(item => item.dataset.id == id)[0]
 	return listItem
 }
 
+//Load product data in product sub-page (edit mode)
 function loadProduct(id) {
 	const prod = getProductById(id)
 	const ingreds = document.querySelectorAll('.add-manager__ingredient-details')
@@ -398,6 +487,7 @@ function loadProduct(id) {
 	createProductBtn.addEventListener('click', editProduct)
 }
 
+//Reset product sub-page
 function resetProduct() {
 	productName.value = ''
 	productContainer.dataset.id = '-1'
@@ -417,9 +507,43 @@ function resetProduct() {
 	createProductBtn.addEventListener('click', createProduct)
 }
 
+//Show resume of day products
+const showDayResume = e => {
+	const dayName = e.target.closest('.calendar__food-column').dataset.day
+	const dayPlan = daysPlan.find(plan => plan.day === dayName)
+	const products = dayPlan.products
+	const count = products.length
+	let cal = 0,
+		carb = 0,
+		prot = 0,
+		fat = 0
+	products.forEach(prod => {
+		cal += CalculationManager.GetCalories(prod)
+		carb += CalculationManager.GetCarbohydrates(prod)
+		prot += CalculationManager.GetProteins(prod)
+		fat += CalculationManager.GetFats(prod)
+	})
+	console.log(`Products:${count}`)
+	console.log(`Calories:${cal}`)
+	console.log(`Carbohydrates:${carb}`)
+	console.log(`Proteins:${prot}`)
+	console.log(`Fats:${fat}`)
+	e.target.removeEventListener('click', showDayResume)
+	e.target.addEventListener('click', closeDayResume)
+	e.target.textContent = 'Zamknij podsumowanie'
+}
+
+const closeDayResume = e => {
+	e.target.removeEventListener('click', closeDayResume)
+	e.target.addEventListener('click', showDayResume)
+	e.target.textContent = 'Pokaż podsumowanie'
+}
+
 document.addEventListener('DOMContentLoaded', loadElements)
+initCalendar()
 appendFoods.forEach(btn => btn.addEventListener('click', showAddFood))
 categoryBtns.forEach(btn => btn.addEventListener('click', toggleBtn))
+showDayResumeBtns.forEach(btn => btn.addEventListener('click', showDayResume))
 calendarNavBtn.addEventListener('click', setCalendarPage)
 productNavBtn.addEventListener('click', setProductPage)
 ingredientAddBtn.addEventListener('click', toggleModal)
