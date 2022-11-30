@@ -13,13 +13,7 @@ html {
 body {
 	width: 100%;
 	height: 100%;
-	background-color: #ddd;
-}
-
-nav {
-	background-color: #999;
-	height: $nav-height;
-	width: 100%;
+	background-color: $background-light;
 }
 
 p {
@@ -36,10 +30,14 @@ p {
 }
 
 .nav-bar {
+	height: $nav-height;
+	width: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 50px;
+	background-color: $primary-dark;
+	box-shadow: 0px 0px 50px $primary-dark;
 
 	&__item {
 		padding: 8px 16px;
@@ -52,9 +50,9 @@ p {
 		outline: none;
 		font-weight: bold;
 		font-size: 2.4rem;
-		//overflow: hidden;
 		transition: opacity 0.5s;
 		opacity: 0.8;
+		color: $text-dark;
 		cursor: pointer;
 
 		&::before {
@@ -63,13 +61,14 @@ p {
 			width: 0;
 			bottom: 0;
 			height: 2px;
-			background-color: #000;
+			background-color: $text-darker;
 			transition: width 0.5s, transform 0.5s;
 			content: '';
 		}
 
 		&:hover {
 			opacity: 1;
+			color: $text-darker;
 			&::before {
 				left: 0;
 				width: 100%;
@@ -81,20 +80,17 @@ p {
 .calendar {
 	display: flex;
 	flex-direction: column;
-	margin: 0 auto;
+	margin: $content-offset auto;
 	width: 100%;
 	height: 100%;
-	max-width: 1440px;
-	background-color: #666;
-	border: 4px solid rebeccapurple;
+	max-width: 1820px;
 
 	&__header {
 		display: flex;
 		flex-direction: row;
 		width: 100%;
 		height: 100%;
-		background-color: #333;
-		color: #ddd;
+		color: $text-darker;
 	}
 
 	&-day {
@@ -102,14 +98,9 @@ p {
 		height: 100%;
 		padding: 10px 20px;
 		text-align: center;
-		background-color: #666;
+		background-color: $complementary-dark;
 		font-weight: bold;
 		font-size: 2rem;
-
-		&--secondary {
-			background-color: #333;
-			color: #ddd;
-		}
 	}
 
 	&__content {
@@ -117,7 +108,7 @@ p {
 		flex-direction: row;
 		width: 100%;
 		height: 100%;
-		background-color: #fff;
+		background-color: $background-light;
 	}
 
 	&__foods {
@@ -125,8 +116,8 @@ p {
 		flex-direction: column;
 		width: 100%;
 		height: 100%;
-		background-color: #666;
-		color: #ddd;
+		background-color: $background-light;
+		color: $text-darker;
 	}
 
 	&__food-column {
@@ -134,9 +125,15 @@ p {
 		flex-direction: column;
 		width: 100%;
 		height: 100%;
-		background-color: #333;
-		border: 2px solid rebeccapurple;
-		color: #ddd;
+		border: 2px solid $complementary-dark;
+
+		&:first-child {
+			border-left: 4px solid $complementary-dark;
+		}
+
+		&:last-child {
+			border-right: 4px solid $complementary-dark;
+		}
 	}
 
 	&__food-box {
@@ -145,8 +142,7 @@ p {
 		flex-direction: column;
 		width: 100%;
 		height: 100%;
-		background-color: #ddd;
-		color: #333;
+		background-color: $background-light;
 		font-size: 1.6rem;
 		z-index: 0;
 	}
@@ -157,6 +153,12 @@ p {
 		align-items: center;
 		width: 100%;
 		height: 100%;
+		border-top: 1px dashed $text-darker;
+		order: 0;
+
+		&:last-child {
+			border-bottom: 1px dashed $text-darker;
+		}
 	}
 
 	&__food-name {
@@ -179,6 +181,9 @@ p {
 		height: 100%;
 		padding: 8px;
 		font-weight: bold;
+		border-top: 2px solid $complementary-dark;
+		border-bottom: 2px solid $complementary-dark;
+		background-color: $complementary-light;
 	}
 
 	&__food-list {
@@ -190,39 +195,69 @@ p {
 		z-index: 1;
 	}
 
-	&__food-show {
-		width: 100%;
+	&__resume-day-box {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-evenly;
+		background-color: $background-light;
+		border-top: 2px solid $complementary-dark;
+		border-bottom: 2px solid $complementary-dark;
+	}
+
+	&__resume-text {
+		order: 0;
+		font-weight: bold;
+		font-size: 1.6rem;
+		padding: 4px 8px;
+		color: $text-darker;
+	}
+
+	&__food-show-btn {
+		width: 80%;
 		height: 100%;
-		margin: 10px 0;
-		padding: 8px;
-		background-color: #fff;
+		margin: 8px auto;
+		padding: 4px 8px;
+		background-color: $background-light;
 		transition: background-color 0.3s ease;
 		border-radius: 8px;
 		cursor: pointer;
+		order: 1;
 
 		&:hover {
-			background-color: #999;
+			background-color: $complementary-dark;
 		}
 	}
 
 	&__append {
-		width: 100%;
+		width: 80%;
 		height: 100%;
+		margin: 5px auto;
 		padding: 8px;
-		background-color: #fff;
-		transition: background-color 0.3s ease;
-		border: none;
+		background-color: $text-light;
+		border: 2px solid;
 		border-radius: 8px;
+		font-weight: bold;
 		cursor: pointer;
+		transition: background-color 0.3s ease;
+		order: 1;
 
 		&:hover {
-			background-color: #999;
+			background-color: $complementary-dark;
 		}
 	}
 
 	&__add-product {
+		margin: 2px auto;
+		width: 80%;
 		padding: 4px 8px;
+		border: 1px solid;
+		border-radius: 8px;
 		cursor: pointer;
+		transition: background-color 0.3s ease;
+
+		&:hover {
+			background-color: $complementary-light;
+		}
 	}
 
 	&__resume {
@@ -235,7 +270,7 @@ p {
 
 .add-manager {
 	position: relative;
-	margin: 0 auto;
+	margin: $content-offset auto 0;
 	display: flex;
 	justify-content: center;
 	align-items: start;
@@ -243,7 +278,7 @@ p {
 	width: 100%;
 	max-width: 1200px;
 	height: 100%;
-	background-color: #aaa;
+	background-color: $background-light;
 
 	////////////////////////////////List box
 	&__list-container {
@@ -252,9 +287,10 @@ p {
 		justify-content: start;
 		align-items: center;
 		width: 30%;
-		height: calc(100vh - $nav-height);
-		background-color: #666;
+		height: calc(100vh - $nav-height - $content-offset);
+		background-color: $complementary-dark;
 		border: 2px solid;
+		overflow-y: scroll;
 	}
 
 	&__list-item {
@@ -262,20 +298,25 @@ p {
 		width: 100%;
 		padding: 8px;
 		justify-content: space-between;
-		background-color: #ddd;
+		background-color: $complementary-light;
 
 		&:nth-child(2n) {
-			background-color: #aaa;
+			background-color: $complementary-medium;
 		}
 	}
 
 	&__list-btn {
-		background-color: mediumseagreen;
 		padding: 6px 8px;
 		margin: 0 auto;
-		border: none;
+		border: 2px solid $complementary-dark;
 		border-radius: 8px;
+		transition: background-color 0.25s ease;
+		font-weight: bold;
 		cursor: pointer;
+
+		&:hover {
+			background-color: $complementary-dark;
+		}
 	}
 
 	&__list-btn--edit {
@@ -291,6 +332,7 @@ p {
 		align-items: center;
 		height: 100%;
 		width: 100%;
+		background-color: $complementary-dark;
 		border: 2px solid;
 	}
 
@@ -299,7 +341,6 @@ p {
 		justify-content: space-between;
 		width: 100%;
 		height: 100%;
-		background-color: #888;
 	}
 
 	&__product-details {
@@ -308,7 +349,7 @@ p {
 		flex-direction: column;
 		height: 100%;
 		width: 50%;
-		background-color: #fff;
+		background-color: $complementary-medium;
 	}
 
 	&__name-box {
@@ -344,9 +385,13 @@ p {
 	}
 
 	&__category-btn {
+		padding: 4px 8px;
+		background-color: $complementary-light;
+		border: 2px solid $complementary-dark;
+		transition: background-color 0.5s, color 0.3s;
+		font-weight: bold;
 		cursor: pointer;
 		order: 1;
-		padding: 4px 8px;
 
 		&--active {
 			order: 0;
@@ -358,6 +403,11 @@ p {
 				content: '\f07d';
 			}
 		}
+
+		&:hover {
+			background-color: $complementary-dark;
+			color: $text-lighter;
+		}
 	}
 
 	&__ingredient-box {
@@ -365,7 +415,7 @@ p {
 		flex-direction: column;
 		width: 100%;
 		height: 100%;
-		background-color: #ddd;
+		background-color: $complementary-light;
 		border: 1px dashed;
 	}
 
@@ -411,7 +461,15 @@ p {
 	&__ingredient-add-btn {
 		margin: 10px auto;
 		padding: 10px 20px;
+		border: 2px solid $complementary-dark;
+		border-radius: 8px;
+		transition: background-color 0.3s ease;
+		font-weight: bold;
 		cursor: pointer;
+
+		&:hover {
+			background-color: $complementary-dark;
+		}
 	}
 
 	&__ingredient-modal {
@@ -422,7 +480,7 @@ p {
 		width: 100vw;
 		height: 100vh;
 		left: 50%;
-		top: calc(50% - $nav-height/2);
+		top: calc(50% - ($nav-height + $content-offset) / 2);
 		background-color: hsl(0, 0, 0, 0.6);
 		translate: -50% -50%;
 
@@ -430,7 +488,7 @@ p {
 			position: relative;
 			width: 400px;
 			height: 360px;
-			background-color: #eee;
+			background-color: $complementary-medium;
 			border: 2px solid;
 			border-radius: 8px;
 		}
@@ -447,7 +505,14 @@ p {
 		right: 60px;
 		bottom: 50px;
 		width: 90px;
+		border: 2px solid $complementary-dark;
+		border-radius: 8px;
+		transition: background-color 0.3s ease;
 		cursor: pointer;
+
+		&:hover {
+			background-color: $complementary-dark;
+		}
 
 		&:last-child {
 			top: 50px;
@@ -467,7 +532,7 @@ p {
 
 	&__product-image {
 		width: 50%;
-		background-color: #333;
+		background-color: $complementary-light;
 	}
 
 	&__label {
@@ -521,7 +586,39 @@ p {
 
 	&__create-product-btn {
 		padding: 8px 16px;
+		border: 2px solid $complementary-dark;
+		border-radius: 8px;
+		transition: background-color 0.3s ease;
+		font-weight: bold;
 		cursor: pointer;
+
+		&:hover {
+			background-color: $complementary-dark;
+		}
+	}
+
+	.product-name {
+		background-color: $complementary-light;
+		border: none;
+		padding: 0 12px;
+		border-radius: 8px;
+		outline: 2px solid $complementary-dark;
+
+		&:focus {
+			outline: 2px solid $text-darker;
+		}
+	}
+
+	.input-field {
+		padding: 6px 12px;
+		background-color: $complementary-light;
+		border: none;
+		border-radius: 8px;
+		outline: 2px solid $complementary-dark;
+
+		&:focus {
+			outline: 2px solid $text-darker;
+		}
 	}
 }
 

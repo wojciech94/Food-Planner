@@ -11,13 +11,7 @@ html {
 body {
   width: 100%;
   height: 100%;
-  background-color: #ddd;
-}
-
-nav {
-  background-color: #999;
-  height: 80px;
-  width: 100%;
+  background-color: hsl(28deg, 100%, 97%);
 }
 
 p {
@@ -34,10 +28,14 @@ p {
 }
 
 .nav-bar {
+  height: 80px;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 50px;
+  background-color: hsl(201deg, 33%, 65%);
+  box-shadow: 0px 0px 50px hsl(201deg, 33%, 65%);
 }
 .nav-bar__item {
   padding: 8px 16px;
@@ -51,6 +49,7 @@ p {
   font-size: 2.4rem;
   transition: opacity 0.5s;
   opacity: 0.8;
+  color: hsl(0deg, 0%, 13%);
   cursor: pointer;
 }
 .nav-bar__btn::before {
@@ -59,12 +58,13 @@ p {
   width: 0;
   bottom: 0;
   height: 2px;
-  background-color: #000;
+  background-color: hsl(0deg, 0%, 7%);
   transition: width 0.5s, transform 0.5s;
   content: "";
 }
 .nav-bar__btn:hover {
   opacity: 1;
+  color: hsl(0deg, 0%, 7%);
 }
 .nav-bar__btn:hover::before {
   left: 0;
@@ -74,57 +74,54 @@ p {
 .calendar {
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
+  margin: 50px auto;
   width: 100%;
   height: 100%;
-  max-width: 1440px;
-  background-color: #666;
-  border: 4px solid rebeccapurple;
+  max-width: 1820px;
 }
 .calendar__header {
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 100%;
-  background-color: #333;
-  color: #ddd;
+  color: hsl(0deg, 0%, 7%);
 }
 .calendar-day {
   width: 100%;
   height: 100%;
   padding: 10px 20px;
   text-align: center;
-  background-color: #666;
+  background-color: hsl(33deg, 30%, 63%);
   font-weight: bold;
   font-size: 2rem;
-}
-.calendar-day--secondary {
-  background-color: #333;
-  color: #ddd;
 }
 .calendar__content {
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: hsl(28deg, 100%, 97%);
 }
 .calendar__foods {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #666;
-  color: #ddd;
+  background-color: hsl(28deg, 100%, 97%);
+  color: hsl(0deg, 0%, 7%);
 }
 .calendar__food-column {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #333;
-  border: 2px solid rebeccapurple;
-  color: #ddd;
+  border: 2px solid hsl(33deg, 30%, 63%);
+}
+.calendar__food-column:first-child {
+  border-left: 4px solid hsl(33deg, 30%, 63%);
+}
+.calendar__food-column:last-child {
+  border-right: 4px solid hsl(33deg, 30%, 63%);
 }
 .calendar__food-box {
   position: relative;
@@ -132,8 +129,7 @@ p {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #ddd;
-  color: #333;
+  background-color: hsl(28deg, 100%, 97%);
   font-size: 1.6rem;
   z-index: 0;
 }
@@ -143,6 +139,11 @@ p {
   align-items: center;
   width: 100%;
   height: 100%;
+  border-top: 1px dashed hsl(0deg, 0%, 7%);
+  order: 0;
+}
+.calendar__food-item:last-child {
+  border-bottom: 1px dashed hsl(0deg, 0%, 7%);
 }
 .calendar__food-name {
   text-align: center;
@@ -162,6 +163,9 @@ p {
   height: 100%;
   padding: 8px;
   font-weight: bold;
+  border-top: 2px solid hsl(33deg, 30%, 63%);
+  border-bottom: 2px solid hsl(33deg, 30%, 63%);
+  background-color: hsl(24deg, 50%, 89%);
 }
 .calendar__food-list {
   position: relative;
@@ -171,35 +175,62 @@ p {
   flex-direction: column;
   z-index: 1;
 }
-.calendar__food-show {
-  width: 100%;
+.calendar__resume-day-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-color: hsl(28deg, 100%, 97%);
+  border-top: 2px solid hsl(33deg, 30%, 63%);
+  border-bottom: 2px solid hsl(33deg, 30%, 63%);
+}
+.calendar__resume-text {
+  order: 0;
+  font-weight: bold;
+  font-size: 1.6rem;
+  padding: 4px 8px;
+  color: hsl(0deg, 0%, 7%);
+}
+.calendar__food-show-btn {
+  width: 80%;
   height: 100%;
-  margin: 10px 0;
-  padding: 8px;
-  background-color: #fff;
+  margin: 8px auto;
+  padding: 4px 8px;
+  background-color: hsl(28deg, 100%, 97%);
   transition: background-color 0.3s ease;
   border-radius: 8px;
   cursor: pointer;
+  order: 1;
 }
-.calendar__food-show:hover {
-  background-color: #999;
+.calendar__food-show-btn:hover {
+  background-color: hsl(33deg, 30%, 63%);
 }
 .calendar__append {
-  width: 100%;
+  width: 80%;
   height: 100%;
+  margin: 5px auto;
   padding: 8px;
-  background-color: #fff;
-  transition: background-color 0.3s ease;
-  border: none;
+  background-color: hsl(0deg, 0%, 93%);
+  border: 2px solid;
   border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  order: 1;
 }
 .calendar__append:hover {
-  background-color: #999;
+  background-color: hsl(33deg, 30%, 63%);
 }
 .calendar__add-product {
+  margin: 2px auto;
+  width: 80%;
   padding: 4px 8px;
+  border: 1px solid;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.calendar__add-product:hover {
+  background-color: hsl(24deg, 50%, 89%);
 }
 .calendar__resume {
   width: 100%;
@@ -210,7 +241,7 @@ p {
 
 .add-manager {
   position: relative;
-  margin: 0 auto;
+  margin: 50px auto 0;
   display: flex;
   justify-content: center;
   align-items: start;
@@ -218,7 +249,7 @@ p {
   width: 100%;
   max-width: 1200px;
   height: 100%;
-  background-color: #aaa;
+  background-color: hsl(28deg, 100%, 97%);
 }
 .add-manager__list-container {
   display: flex;
@@ -226,27 +257,32 @@ p {
   justify-content: start;
   align-items: center;
   width: 30%;
-  height: calc(100vh - 80px);
-  background-color: #666;
+  height: calc(100vh - 80px - 50px);
+  background-color: hsl(33deg, 30%, 63%);
   border: 2px solid;
+  overflow-y: scroll;
 }
 .add-manager__list-item {
   display: flex;
   width: 100%;
   padding: 8px;
   justify-content: space-between;
-  background-color: #ddd;
+  background-color: hsl(24deg, 50%, 89%);
 }
 .add-manager__list-item:nth-child(2n) {
-  background-color: #aaa;
+  background-color: hsl(27deg, 56%, 80%);
 }
 .add-manager__list-btn {
-  background-color: mediumseagreen;
   padding: 6px 8px;
   margin: 0 auto;
-  border: none;
+  border: 2px solid hsl(33deg, 30%, 63%);
   border-radius: 8px;
+  transition: background-color 0.25s ease;
+  font-weight: bold;
   cursor: pointer;
+}
+.add-manager__list-btn:hover {
+  background-color: hsl(33deg, 30%, 63%);
 }
 .add-manager__list-btn--edit {
   margin-right: 0;
@@ -259,6 +295,7 @@ p {
   align-items: center;
   height: 100%;
   width: 100%;
+  background-color: hsl(33deg, 30%, 63%);
   border: 2px solid;
 }
 .add-manager__product-box {
@@ -266,7 +303,6 @@ p {
   justify-content: space-between;
   width: 100%;
   height: 100%;
-  background-color: #888;
 }
 .add-manager__product-details {
   position: relative;
@@ -274,7 +310,7 @@ p {
   flex-direction: column;
   height: 100%;
   width: 50%;
-  background-color: #fff;
+  background-color: hsl(27deg, 56%, 80%);
 }
 .add-manager__name-box {
   display: flex;
@@ -304,9 +340,13 @@ p {
   height: 100%;
 }
 .add-manager__category-btn {
+  padding: 4px 8px;
+  background-color: hsl(24deg, 50%, 89%);
+  border: 2px solid hsl(33deg, 30%, 63%);
+  transition: background-color 0.5s, color 0.3s;
+  font-weight: bold;
   cursor: pointer;
   order: 1;
-  padding: 4px 8px;
 }
 .add-manager__category-btn--active {
   order: 0;
@@ -317,12 +357,16 @@ p {
   font-weight: 900;
   content: "\f07d";
 }
+.add-manager__category-btn:hover {
+  background-color: hsl(33deg, 30%, 63%);
+  color: hsl(0deg, 0%, 100%);
+}
 .add-manager__ingredient-box {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #ddd;
+  background-color: hsl(24deg, 50%, 89%);
   border: 1px dashed;
 }
 .add-manager__ingredient-details {
@@ -361,7 +405,14 @@ p {
 .add-manager__ingredient-add-btn {
   margin: 10px auto;
   padding: 10px 20px;
+  border: 2px solid hsl(33deg, 30%, 63%);
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
   cursor: pointer;
+}
+.add-manager__ingredient-add-btn:hover {
+  background-color: hsl(33deg, 30%, 63%);
 }
 .add-manager__ingredient-modal {
   position: absolute;
@@ -371,7 +422,7 @@ p {
   width: 100vw;
   height: 100vh;
   left: 50%;
-  top: calc(50% - 40px);
+  top: calc(50% - 65px);
   background-color: hsla(0deg, 0%, 0%, 0.6);
   translate: -50% -50%;
 }
@@ -379,7 +430,7 @@ p {
   position: relative;
   width: 400px;
   height: 360px;
-  background-color: #eee;
+  background-color: hsl(27deg, 56%, 80%);
   border: 2px solid;
   border-radius: 8px;
 }
@@ -393,7 +444,13 @@ p {
   right: 60px;
   bottom: 50px;
   width: 90px;
+  border: 2px solid hsl(33deg, 30%, 63%);
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
   cursor: pointer;
+}
+.add-manager__modal-btn:hover {
+  background-color: hsl(33deg, 30%, 63%);
 }
 .add-manager__modal-btn:last-child {
   top: 50px;
@@ -409,7 +466,7 @@ p {
 }
 .add-manager__product-image {
   width: 50%;
-  background-color: #333;
+  background-color: hsl(24deg, 50%, 89%);
 }
 .add-manager__label {
   padding: 10px 20px;
@@ -454,7 +511,34 @@ p {
 }
 .add-manager__create-product-btn {
   padding: 8px 16px;
+  border: 2px solid hsl(33deg, 30%, 63%);
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
   cursor: pointer;
+}
+.add-manager__create-product-btn:hover {
+  background-color: hsl(33deg, 30%, 63%);
+}
+.add-manager .product-name {
+  background-color: hsl(24deg, 50%, 89%);
+  border: none;
+  padding: 0 12px;
+  border-radius: 8px;
+  outline: 2px solid hsl(33deg, 30%, 63%);
+}
+.add-manager .product-name:focus {
+  outline: 2px solid hsl(0deg, 0%, 7%);
+}
+.add-manager .input-field {
+  padding: 6px 12px;
+  background-color: hsl(24deg, 50%, 89%);
+  border: none;
+  border-radius: 8px;
+  outline: 2px solid hsl(33deg, 30%, 63%);
+}
+.add-manager .input-field:focus {
+  outline: 2px solid hsl(0deg, 0%, 7%);
 }
 
 .disabled {

@@ -13,7 +13,7 @@ const modalBtnX = document.querySelector('.btn-x')
 const modalBtnPlus = document.querySelector('.btn-plus')
 const listContainer = document.querySelector('.add-manager__list-container')
 const listAddBtn = document.querySelector('.add-manager__list-btn--add')
-const showDayResumeBtns = document.querySelectorAll('.calendar__food-show')
+const showDayResumeBtns = document.querySelectorAll('.calendar__food-show-btn')
 const productContainer = document.querySelector('.add-manager__product-container')
 const productHeader = document.querySelector('.add-manager__label--manage-header')
 const productName = document.querySelector('.product-name')
@@ -523,19 +523,29 @@ const showDayResume = e => {
 		prot += CalculationManager.GetProteins(prod)
 		fat += CalculationManager.GetFats(prod)
 	})
-	console.log(`Products:${count}`)
-	console.log(`Calories:${cal}`)
-	console.log(`Carbohydrates:${carb}`)
-	console.log(`Proteins:${prot}`)
-	console.log(`Fats:${fat}`)
+	createResumeParagraph(e.target.parentElement, `Produkty:${count}`)
+	createResumeParagraph(e.target.parentElement, `Węglowodany:${carb}`)
+	createResumeParagraph(e.target.parentElement, `Białko:${prot}`)
+	createResumeParagraph(e.target.parentElement, `Tłuszcze:${fat}`)
+	createResumeParagraph(e.target.parentElement, `Kalorie:${cal}kcal`)
 	e.target.removeEventListener('click', showDayResume)
 	e.target.addEventListener('click', closeDayResume)
 	e.target.textContent = 'Zamknij podsumowanie'
 }
 
+function createResumeParagraph(parent, text) {
+	console.log(parent)
+	const paragraph = document.createElement('p')
+	paragraph.classList.add('calendar__resume-text')
+	paragraph.textContent = text
+	parent.append(paragraph)
+}
+
 const closeDayResume = e => {
 	e.target.removeEventListener('click', closeDayResume)
 	e.target.addEventListener('click', showDayResume)
+	const resumeParagraphs = e.target.parentElement.querySelectorAll('.calendar__resume-text')
+	resumeParagraphs.forEach(par => par.remove())
 	e.target.textContent = 'Pokaż podsumowanie'
 }
 
