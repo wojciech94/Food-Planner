@@ -229,7 +229,17 @@ const toggleBtn = e => {
 
 //Toggle ingredient modal
 const toggleModal = () => {
+	if (ingredientModal.classList.contains('disabled')) {
+		resetModal()
+	}
 	ingredientModal.classList.toggle('disabled')
+}
+
+//Reset modal state
+function resetModal() {
+	modalBtnPlus.removeEventListener('click', updateIngredient)
+	modalBtnPlus.addEventListener('click', addIngredient)
+	modalBtnPlus.removeAttribute('data-ingredient-id')
 }
 
 //Show calendar sub-page
@@ -257,6 +267,15 @@ function clearIngredientModal() {
 	weights.value = ''
 }
 
+//Fill ingredient modal by ingredient details
+function fillIngredientModal(ingredient) {
+	ingredientName.value = ingredient.name
+	carbohydrates.value = ingredient.carbohydrates
+	proteins.value = ingredient.proteins
+	fats.value = ingredient.fat
+	weights.value = ingredient.weight
+}
+
 //Add ingredient to product
 const addIngredient = () => {
 	const name = ingredientName.value
@@ -269,6 +288,39 @@ const addIngredient = () => {
 	ingredientModal.classList.toggle('disabled')
 	createIngredient(ingredient)
 	clearIngredientModal()
+}
+
+//Update edited ingredient
+const updateIngredient = e => {
+	const target = e.target
+	const id = target.dataset.ingredientId
+	const ingredient = getIngredientById(Number(id))
+	const ingredientDetials = ingredientBox.querySelector(`.add-manager__ingredient-details[data-ingredient-id="${id}"]`)
+	const label = ingredientDetials.querySelector('.add-manager__label--ingredient')
+	const weight = ingredientDetials.querySelector('.add-manager__label--weight')
+	const manageBox = ingredientDetials.querySelector('.add-manager__ingredient-macro-box')
+	const carbs = manageBox.querySelector('.carbohydrates')
+	const prote = manageBox.querySelector('.protein')
+	const fat = manageBox.querySelector('.fat')
+	ingredient.name = ingredientName.value
+	ingredient.carbohydrates = carbohydrates.value
+	ingredient.proteins = proteins.value
+	ingredient.fat = fats.value
+	ingredient.weight = weights.value
+	label.textContent = ingredientName.value
+	weight.textContent = weights.value
+	carbs.textContent = 'W:' + carbohydrates.value
+	prote.textContent = 'B:' + proteins.value
+	fat.textContent = 'T:' + fats.value
+	caloriesSum.textContent = CalculationManager.GetCalories(ingredients)
+	carbohydratesSum.textContent = CalculationManager.GetCarbohydrates(ingredients)
+	proteinSum.textContent = CalculationManager.GetProteins(ingredients)
+	fatSum.textContent = CalculationManager.GetFats(ingredients)
+	target.removeAttribute('data-ingredient-id')
+	modalBtnPlus.removeEventListener('click', updateIngredient)
+	modalBtnPlus.addEventListener('click', addIngredient)
+	resetModal()
+	ingredientModal.classList.add('disabled')
 }
 
 //Create ingredient html content
@@ -294,7 +346,7 @@ function createIngredientDetails(name, weight, id) {
 	const ingredientName = document.createElement('p')
 	ingredientName.classList.add('add-manager__label', 'add-manager__label--ingredient')
 	const ingredientWeight = document.createElement('p')
-	ingredientWeight.classList.add('add-manager__label', 'add-manager__label--calories')
+	ingredientWeight.classList.add('add-manager__label', 'add-manager__label--weight')
 	ingredientDetails.append(ingredientName, ingredientWeight)
 	ingredientName.textContent = name
 	ingredientWeight.textContent = weight
@@ -338,18 +390,32 @@ function createManageBox() {
 	manageBox.classList.add('add-manager__ingredient-manage-box')
 	const editBtn = document.createElement('button')
 	editBtn.classList.add('add-manager__ingredient-manage-item')
+	editBtn.classList.add('add-manager__ingredient-manage-item--edit')
 	const cancelBtn = document.createElement('button')
 	cancelBtn.classList.add('add-manager__ingredient-manage-item')
+	cancelBtn.classList.add('add-manager__ingredient-manage-item--close')
 	const editIcon = document.createElement('i')
 	const cancelIcon = document.createElement('i')
 	editIcon.classList.add('fa-solid', 'fa-pen-to-square')
 	cancelIcon.classList.add('fa-solid', 'fa-xmark')
 	manageBox.append(editBtn, cancelBtn)
 	editBtn.append(editIcon)
+	editBtn.addEventListener('click', editIngredient)
 	cancelBtn.append(cancelIcon)
 	cancelBtn.addEventListener('click', removeIngredient)
 
 	return manageBox
+}
+
+//Execute edit ingredient
+const editIngredient = e => {
+	const ingredientId = Number(e.target.closest('.add-manager__ingredient-details').dataset.ingredientId)
+	const ingredient = ingredients.find(ingr => ingr.id == ingredientId)
+	fillIngredientModal(ingredient)
+	toggleModal()
+	modalBtnPlus.dataset.ingredientId = ingredientId
+	modalBtnPlus.removeEventListener('click', addIngredient)
+	modalBtnPlus.addEventListener('click', updateIngredient)
 }
 
 //Remove ingredient from product, recalculate macro
@@ -460,6 +526,10 @@ function getListItemById(id) {
 	const listItems = Array.from(document.querySelectorAll('.add-manager__list-item'))
 	const listItem = listItems.filter(item => item.dataset.id == id)[0]
 	return listItem
+}
+
+function getIngredientById(id) {
+	return ingredients.filter(ingr => ingr.id === id)[0]
 }
 
 //Load product data in product sub-page (edit mode)

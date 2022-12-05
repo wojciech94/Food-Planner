@@ -21,10 +21,12 @@ p {
 .fa-pen-to-square,
 .fa-plus {
   color: green;
+  pointer-events: none;
 }
 
 .fa-xmark {
   color: red;
+  pointer-events: none;
 }
 
 .nav-bar {
@@ -484,7 +486,7 @@ p {
   font-size: 1.6rem;
   text-align: start;
 }
-.add-manager__label--calories {
+.add-manager__label--weight {
   width: 8%;
   font-size: 1.6rem;
   text-align: start;
