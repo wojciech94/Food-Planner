@@ -497,7 +497,12 @@ p {
   font-size: 1.6rem;
   text-align: start;
 }
+.add-manager__label--list {
+  font-size: 1.6rem;
+  align-self: center;
+}
 .add-manager__label--category {
+  display: inline;
   font-size: 1.6rem;
   text-align: start;
 }

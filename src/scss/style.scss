@@ -568,7 +568,13 @@ p {
 			text-align: start;
 		}
 
+		&--list {
+			font-size: 1.6rem;
+			align-self: center;
+		}
+
 		&--category {
+			display: inline;
 			font-size: 1.6rem;
 			text-align: start;
 		}

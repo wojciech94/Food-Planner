@@ -162,6 +162,7 @@ const showAddFood = e => {
 	appendFoodBtn.removeEventListener('click', showAddFood)
 	appendFoodBtn.addEventListener('click', closeAppend)
 	appendFoodBtn.textContent = 'Zamknij'
+	cleanResumes()
 }
 
 //Reset add food to calendar events and textcontent
@@ -208,6 +209,7 @@ const removeFood = e => {
 	const k = planOfDay.products.findIndex(prod => prod.id === id)
 	planOfDay.products.splice(k, 1)
 	e.target.parentElement.remove()
+	cleanResumes()
 }
 
 //Close append food list
@@ -255,6 +257,7 @@ const setProductPage = () => {
 	if (productPage.classList.contains('disabled')) {
 		calendarPage.classList.add('disabled')
 		productPage.classList.remove('disabled')
+		cleanResumes()
 	}
 }
 
@@ -443,21 +446,32 @@ function createListItem(name, category, id) {
 	const listItem = document.createElement('div')
 	const nameDiv = document.createElement('p')
 	const editBtn = document.createElement('button')
+	const removeBtn = document.createElement('button')
+	const manageBox = document.createElement('div')
+	const editIcon = document.createElement('i')
+	const cancelIcon = document.createElement('i')
 
 	listContainer.append(listItem)
-	listItem.append(nameDiv, editBtn)
+	listItem.append(nameDiv, manageBox)
+	manageBox.append(editBtn, removeBtn)
 
+	editIcon.classList.add('fa-solid', 'fa-pen-to-square')
+	cancelIcon.classList.add('fa-solid', 'fa-xmark')
 	listItem.classList.add('add-manager__list-item')
 	listItem.dataset.id = id
 	listItem.dataset.type = category
-	nameDiv.classList.add('add-manager__label--name')
+	nameDiv.classList.add('add-manager__label--list')
 	editBtn.classList.add('add-manager__list-btn', 'add-manager__list-btn--edit')
+	removeBtn.classList.add('add-manager__list-btn', 'add-manager__list-btn--remove')
 	editBtn.dataset.id = id
+	removeBtn.dataset.id = id
 	editBtn.dataset.type = category
 
 	nameDiv.textContent = name
-	editBtn.textContent = 'edit'
 	editBtn.addEventListener('click', setEditMode)
+	removeBtn.addEventListener('click', removeProduct)
+	editBtn.append(editIcon)
+	removeBtn.append(cancelIcon)
 	activeCategory.classList.remove('add-manager__category-btn--active')
 	activeCategory = productContainer.querySelector(`[data-type="breakfast"]`)
 	activeCategory.classList.add('add-manager__category-btn--active')
@@ -495,6 +509,27 @@ const editProduct = e => {
 	const target = e.target.closest('.add-manager__product-container')
 	const id = Number(target.dataset.id)
 	updateProduct(id)
+	updateCalendarProducts(id)
+}
+
+//Remove product
+const removeProduct = e => {
+	const parent = e.target.parentElement
+	const id = e.target.dataset.id
+	parent.remove()
+	const listId = products.findIndex(prod => prod.id === id)
+	products.splice(listId, 1)
+	const calendarItems = calendarPage.querySelectorAll(`.calendar__food-name[data-id="${id}"]`)
+	calendarItems.forEach(item => item.parentElement.remove())
+	daysPlan.forEach(day => {
+		let listId = 0
+		do {
+			listId = day.products.findIndex(product => product.id === Number(id))
+			if (listId >= 0) {
+				day.products.splice(listId, 1)
+			}
+		} while (listId >= 0)
+	})
 }
 
 //Set edit mode of product page
@@ -506,6 +541,7 @@ const setEditMode = e => {
 	activeCategory = productContainer.querySelector(`[data-type=${category}]`)
 	activeCategory.classList.add('add-manager__category-btn--active')
 	createProductBtn.textContent = 'Zapisz zmiany'
+	createProductBtn.dataset.id = id
 	loadProduct(id)
 }
 
@@ -577,6 +613,23 @@ function resetProduct() {
 	createProductBtn.addEventListener('click', createProduct)
 }
 
+//Update product names in calendar panel (after renaming)
+function updateCalendarProducts(id) {
+	const labels = calendarPage.querySelectorAll(`.calendar__food-name[data-id="${id}"]`)
+	console.log(id)
+	const productName = getProductById(id).name
+	labels.forEach(lab => (lab.textContent = productName))
+	updateDaysResume(id)
+}
+
+function updateDaysResume(id) {
+	const calendarColumns = calendarPage.querySelectorAll('.calendar__food-column')
+	calendarColumns.forEach(col => {
+		if (col.querySelector(`.calendar__food-name[data-id="${id}"]`)) {
+		}
+	})
+}
+
 //Show resume of day products
 const showDayResume = e => {
 	const dayName = e.target.closest('.calendar__food-column').dataset.day
@@ -603,20 +656,32 @@ const showDayResume = e => {
 	e.target.textContent = 'Zamknij podsumowanie'
 }
 
+//Create calendar resume macro paragraphs
 function createResumeParagraph(parent, text) {
-	console.log(parent)
 	const paragraph = document.createElement('p')
 	paragraph.classList.add('calendar__resume-text')
 	paragraph.textContent = text
 	parent.append(paragraph)
 }
 
+//Close day resume
 const closeDayResume = e => {
 	e.target.removeEventListener('click', closeDayResume)
 	e.target.addEventListener('click', showDayResume)
 	const resumeParagraphs = e.target.parentElement.querySelectorAll('.calendar__resume-text')
 	resumeParagraphs.forEach(par => par.remove())
 	e.target.textContent = 'Pokaż podsumowanie'
+}
+
+//Clean Resumes
+function cleanResumes() {
+	const resumeParagraphs = document.querySelectorAll('.calendar__resume-text')
+	resumeParagraphs.forEach(par => par.remove())
+	showDayResumeBtns.forEach(btn => {
+		btn.textContent = 'Pokaż podsumowanie'
+		btn.removeEventListener('click', closeDayResume)
+		btn.addEventListener('click', showDayResume)
+	})
 }
 
 document.addEventListener('DOMContentLoaded', loadElements)
