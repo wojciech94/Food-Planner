@@ -363,26 +363,20 @@ p {
 	&__category-box {
 		position: relative;
 		display: flex;
-		height: 180px;
-		max-height: 40px;
+		height: 100%;
 		margin: 10px 0;
-		transition: max-height 0.7s ease;
-
-		&:hover {
-			max-height: 180px;
-		}
 	}
 
 	&__category-dropdown {
 		display: flex;
 		flex-direction: column;
 		padding: 4px 0;
-		height: 3.3rem;
-		transition: height 0.7s ease;
+		max-height: 3.3rem;
 		overflow: hidden;
+		transition: max-height 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
 		&:hover {
-			height: 100%;
+			max-height: 180px;
 		}
 	}
 
@@ -418,7 +412,6 @@ p {
 		width: 100%;
 		height: 100%;
 		background-color: $complementary-light;
-		border: 1px dashed;
 	}
 
 	&__ingredient-details {
@@ -446,6 +439,7 @@ p {
 
 	&__ingredient-manage-box {
 		width: 18%;
+		min-width: 70px;
 		display: flex;
 		justify-content: space-evenly;
 		align-items: center;
@@ -535,6 +529,7 @@ p {
 	&__product-image {
 		width: 50%;
 		background-color: $complementary-light;
+		border-left: 2px solid $complementary-dark;
 	}
 
 	&__label {

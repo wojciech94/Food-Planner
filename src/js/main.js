@@ -139,9 +139,26 @@ function initCalendar() {
 	daysPlan.push(monday, tuesday, wednesday, thurstday, friday, saturday, sunday)
 }
 
+//Save to local storage
+function saveToStorage() {
+	window.localStorage.setItem('products', JSON.stringify(products))
+}
+
 //Load active category
 const loadElements = () => {
 	activeCategory = document.querySelector('.add-manager__category-btn--active')
+	if (window.localStorage.getItem('products') !== null) {
+		products = JSON.parse(window.localStorage.getItem('products'))
+		let maxId = 0
+		for (let i = 0; i < products.length; i++) {
+			products[i] = Object.assign(new Product('', '', []), products[i])
+			if (products[i].id > maxId) {
+				maxId = products[i].id
+			}
+			addProductToList(products[i])
+		}
+		Product.nextId = maxId + 1
+	}
 }
 
 //Show food list btns to add it to calendar
@@ -455,6 +472,7 @@ function createListItem(name, category, id) {
 	listItem.append(nameDiv, manageBox)
 	manageBox.append(editBtn, removeBtn)
 
+	manageBox.classList.add('add-manager__ingredient-manage-box')
 	editIcon.classList.add('fa-solid', 'fa-pen-to-square')
 	cancelIcon.classList.add('fa-solid', 'fa-xmark')
 	listItem.classList.add('add-manager__list-item')
@@ -486,6 +504,7 @@ const createProduct = () => {
 	products.push(product)
 	addProductToList(product)
 	resetProduct()
+	saveToStorage()
 }
 
 //Update product of specified id
@@ -500,7 +519,7 @@ function updateProduct(id) {
 	item.dataset.type = category
 	const editBtn = item.querySelector('.add-manager__list-btn--edit')
 	editBtn.dataset.type = category
-	const label = item.querySelector('.add-manager__label--name')
+	const label = item.querySelector('.add-manager__label--list')
 	label.textContent = product.name
 }
 
@@ -510,14 +529,16 @@ const editProduct = e => {
 	const id = Number(target.dataset.id)
 	updateProduct(id)
 	updateCalendarProducts(id)
+	saveToStorage()
 }
 
 //Remove product
 const removeProduct = e => {
-	const parent = e.target.parentElement
+	const parent = e.target.closest('.add-manager__list-item')
 	const id = e.target.dataset.id
 	parent.remove()
-	const listId = products.findIndex(prod => prod.id === id)
+	const listId = products.findIndex(prod => prod.id === Number(id))
+	console.log(listId)
 	products.splice(listId, 1)
 	const calendarItems = calendarPage.querySelectorAll(`.calendar__food-name[data-id="${id}"]`)
 	calendarItems.forEach(item => item.parentElement.remove())
@@ -530,6 +551,7 @@ const removeProduct = e => {
 			}
 		} while (listId >= 0)
 	})
+	saveToStorage()
 }
 
 //Set edit mode of product page
