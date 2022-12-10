@@ -32,6 +32,7 @@ let activeCategory
 let products = []
 let ingredients = []
 let daysPlan = []
+let test
 
 class Product {
 	constructor(name, category, ingredients) {
@@ -56,6 +57,14 @@ class Ingredient {
 		Ingredient.nextId++
 	}
 	static nextId = 0
+}
+
+class PlanOfDay {
+	constructor(day) {
+		this.day = day
+		this.products = []
+		this.categoryLinkedList = []
+	}
 }
 
 class CalculationManager {
@@ -120,13 +129,6 @@ class CalculationManager {
 	}
 }
 
-class PlanOfDay {
-	constructor(day) {
-		this.day = day
-		this.products = []
-	}
-}
-
 //Init days plan objects
 function initCalendar() {
 	const monday = new PlanOfDay('monday')
@@ -137,6 +139,7 @@ function initCalendar() {
 	const saturday = new PlanOfDay('saturday')
 	const sunday = new PlanOfDay('sunday')
 	daysPlan.push(monday, tuesday, wednesday, thurstday, friday, saturday, sunday)
+	saveDaysToStorage()
 }
 
 //Save to local storage
@@ -144,9 +147,20 @@ function saveToStorage() {
 	window.localStorage.setItem('products', JSON.stringify(products))
 }
 
+//Save days to localStorage
+function saveDaysToStorage() {
+	window.localStorage.setItem('daysPlans', JSON.stringify(daysPlan))
+}
+
 //Load active category
 const loadElements = () => {
 	activeCategory = document.querySelector('.add-manager__category-btn--active')
+	loadProductsData()
+	loadDayData()
+}
+
+//Load products from local storage
+function loadProductsData() {
 	if (window.localStorage.getItem('products') !== null) {
 		products = JSON.parse(window.localStorage.getItem('products'))
 		let maxId = 0
@@ -158,6 +172,31 @@ const loadElements = () => {
 			addProductToList(products[i])
 		}
 		Product.nextId = maxId + 1
+	}
+}
+
+//Load daysPlan data
+function loadDayData() {
+	if (window.localStorage.getItem('daysPlans') !== null) {
+		daysPlan = JSON.parse(window.localStorage.getItem('daysPlans'))
+		const columns = Array.from(calendarPage.querySelectorAll('.calendar__food-column'))
+		for (let i = 0; i < daysPlan.length; i++) {
+			daysPlan[i] = Object.assign(new PlanOfDay(''), daysPlan[i])
+			for (let j = 0; j < daysPlan[i].products.length; j++) {
+				daysPlan[i].products[j] = Object.assign(new Product('', '', []), daysPlan[i].products[j])
+			}
+			for (let k = 0; k < daysPlan[i].categoryLinkedList.length; k++) {
+				const column = columns.find(col => col.dataset.day === daysPlan[i].day)
+				if (column) {
+					const rowId = daysPlan[i].categoryLinkedList[k][0]
+					const prodId = daysPlan[i].categoryLinkedList[k][1]
+					const product = getProductById(prodId)
+					createFoodElement(column, rowId, product)
+				}
+			}
+		}
+	} else {
+		initCalendar()
 	}
 }
 
@@ -173,7 +212,8 @@ const showAddFood = e => {
 		btn.classList.add('calendar__add-product')
 		btn.dataset.id = product.id
 		btn.textContent = product.name
-		btn.addEventListener('click', addFood)
+		btn.dataset.categoryId = targetBox.dataset.categoryId
+		btn.addEventListener('click', addFoodEvent)
 		foodList.append(btn)
 	})
 	appendFoodBtn.removeEventListener('click', showAddFood)
@@ -190,9 +230,11 @@ function hideAddFood(target) {
 }
 
 //Add product to calendar
-const addFood = e => {
-	const id = Number(e.target.dataset.id)
+const addFoodEvent = e => {
+	const target = e.target
+	const id = Number(target.dataset.id)
 	const box = e.target.closest('.calendar__food-box')
+	const category = Number(box.dataset.categoryId)
 	const appendElement = box.querySelector('.calendar__append')
 	const foods = box.querySelector('.calendar__foods')
 	const foodList = box.querySelector('.calendar__food-list')
@@ -200,7 +242,7 @@ const addFood = e => {
 	foodItem.classList.add('calendar__food-item')
 	const foodName = document.createElement('p')
 	foodName.classList.add('calendar__food-name')
-	foodName.textContent = e.target.textContent
+	foodName.textContent = target.textContent
 	foodName.dataset.id = id
 	const removebtn = document.createElement('button')
 	removebtn.classList.add('calendar__food-remove')
@@ -209,24 +251,49 @@ const addFood = e => {
 	removebtn.dataset.id = id
 	foods.append(foodItem)
 	foodItem.append(foodName, removebtn)
-	const foodColumn = e.target.closest('.calendar__food-column')
+	const foodColumn = target.closest('.calendar__food-column')
 	const product = getProductById(id)
 	const day = foodColumn.dataset.day
 	const planOfDay = daysPlan.filter(d => d.day === day)[0]
-	planOfDay.products.push(product)
+	if (planOfDay.products.findIndex(prod => prod.name === product.name) === -1) {
+		planOfDay.products.push(product)
+	}
+	planOfDay.categoryLinkedList.push([category, id])
+	saveDaysToStorage()
 	hideAddFood(appendElement)
 	foodList.remove()
+}
+
+//CreateFoodItem
+function createFoodElement(column, rowId, product) {
+	const box = column.querySelector(`.calendar__food-box[data-category-id="${rowId}"]`)
+	if (box) {
+		const foods = box.querySelector('.calendar__foods')
+		const foodItem = document.createElement('div')
+		foodItem.classList.add('calendar__food-item')
+		const foodName = document.createElement('p')
+		foodName.classList.add('calendar__food-name')
+		foodName.textContent = product.name
+		foodName.dataset.id = product.id
+		const removebtn = document.createElement('button')
+		removebtn.classList.add('calendar__food-remove')
+		removebtn.textContent = 'x'
+		removebtn.addEventListener('click', removeFood)
+		removebtn.dataset.id = product.id
+		foods.append(foodItem)
+		foodItem.append(foodName, removebtn)
+	}
 }
 
 //Remove food from calendar
 const removeFood = e => {
 	const id = Number(e.target.dataset.id)
 	const day = e.target.closest('.calendar__food-column').dataset.day
-	const planOfDay = daysPlan.filter(d => d.day === day)[0]
-	const k = planOfDay.products.findIndex(prod => prod.id === id)
-	planOfDay.products.splice(k, 1)
+	const row = e.target.closest('.calendar__food-box').dataset.categoryId
 	e.target.parentElement.remove()
 	cleanResumes()
+	removeProductFromLinkedList(day, row, id)
+	saveDaysToStorage()
 }
 
 //Close append food list
@@ -538,7 +605,6 @@ const removeProduct = e => {
 	const id = e.target.dataset.id
 	parent.remove()
 	const listId = products.findIndex(prod => prod.id === Number(id))
-	console.log(listId)
 	products.splice(listId, 1)
 	const calendarItems = calendarPage.querySelectorAll(`.calendar__food-name[data-id="${id}"]`)
 	calendarItems.forEach(item => item.parentElement.remove())
@@ -550,8 +616,37 @@ const removeProduct = e => {
 				day.products.splice(listId, 1)
 			}
 		} while (listId >= 0)
+		const linkedList = day.categoryLinkedList
+		for (let i = linkedList.length - 1; i >= 0; i--) {
+			if (linkedList[i][1] === Number(id)) {
+				linkedList.splice(i, 1)
+			}
+		}
 	})
 	saveToStorage()
+	saveDaysToStorage()
+}
+
+function removeProductFromLinkedList(day, row, productId) {
+	const dayPl = daysPlan.filter(d => d.day === day)[0]
+	const catList = []
+	let elementId
+	for (let i = 0; i < dayPl.categoryLinkedList.length; i++) {
+		if (dayPl.categoryLinkedList[i][1] == productId) {
+			catList.push(i)
+			if (dayPl.categoryLinkedList[i][0] == row) {
+				elementId = i
+			}
+		}
+	}
+
+	if (catList.length > 1) {
+		dayPl.categoryLinkedList.splice(elementId, 1)
+	} else if (catList.length === 1) {
+		dayPl.categoryLinkedList.splice(elementId, 1)
+		const k = dayPl.products.findIndex(prod => prod.id == productId)
+		dayPl.products.splice(k, 1)
+	}
 }
 
 //Set edit mode of product page
@@ -638,7 +733,6 @@ function resetProduct() {
 //Update product names in calendar panel (after renaming)
 function updateCalendarProducts(id) {
 	const labels = calendarPage.querySelectorAll(`.calendar__food-name[data-id="${id}"]`)
-	console.log(id)
 	const productName = getProductById(id).name
 	labels.forEach(lab => (lab.textContent = productName))
 	updateDaysResume(id)
@@ -656,19 +750,22 @@ function updateDaysResume(id) {
 const showDayResume = e => {
 	const dayName = e.target.closest('.calendar__food-column').dataset.day
 	const dayPlan = daysPlan.find(plan => plan.day === dayName)
-	const products = dayPlan.products
-	const count = products.length
+	const list = dayPlan.categoryLinkedList
 	let cal = 0,
 		carb = 0,
 		prot = 0,
 		fat = 0
-	products.forEach(prod => {
-		cal += CalculationManager.GetCalories(prod)
-		carb += CalculationManager.GetCarbohydrates(prod)
-		prot += CalculationManager.GetProteins(prod)
-		fat += CalculationManager.GetFats(prod)
-	})
-	createResumeParagraph(e.target.parentElement, `Produkty:${count}`)
+	if (list.length > 0) {
+		for (let i = 0; i < list.length; i++) {
+			const id = list[i][1]
+			const product = getProductById(id)
+			cal += CalculationManager.GetCalories(product)
+			carb += CalculationManager.GetCarbohydrates(product)
+			prot += CalculationManager.GetProteins(product)
+			fat += CalculationManager.GetFats(product)
+		}
+	}
+	createResumeParagraph(e.target.parentElement, `Produkty:${list.length}`)
 	createResumeParagraph(e.target.parentElement, `Węglowodany:${carb}`)
 	createResumeParagraph(e.target.parentElement, `Białko:${prot}`)
 	createResumeParagraph(e.target.parentElement, `Tłuszcze:${fat}`)
@@ -707,7 +804,6 @@ function cleanResumes() {
 }
 
 document.addEventListener('DOMContentLoaded', loadElements)
-initCalendar()
 appendFoods.forEach(btn => btn.addEventListener('click', showAddFood))
 categoryBtns.forEach(btn => btn.addEventListener('click', toggleBtn))
 showDayResumeBtns.forEach(btn => btn.addEventListener('click', showDayResume))
