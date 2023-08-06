@@ -34,7 +34,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [Solution](https://github.com/wojciech94/Food-Planner/)
-- Live Site URL: [Site](https://wojciech94.github.io/Interactive-Comments-Section/)
+- Live Site URL: [Site](https://wojciech94.github.io/Food-Planner/)
 
 ## Author
 
